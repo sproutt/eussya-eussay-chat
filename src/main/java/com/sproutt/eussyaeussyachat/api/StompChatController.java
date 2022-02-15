@@ -1,8 +1,8 @@
 package com.sproutt.eussyaeussyachat.api;
 
+import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
 import com.sproutt.eussyaeussyachat.application.ChatService;
 import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
-import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.messaging.handler.annotation.MessageMapping;
@@ -20,6 +20,6 @@ public class StompChatController {
     @MessageMapping(value = "/chat/one-to-one")
     public void message(OneToOneChatMessageDTO messageDto){
         OneToOneChatMessage message = chatService.save(messageDto);
-        template.convertAndSend("/sub/chat/" + messageDto.getTo(), OneToOneChatMessage.of(messageDto));
+        template.convertAndSend("/sub/chat/" + messageDto.getTo(), message);
     }
 }

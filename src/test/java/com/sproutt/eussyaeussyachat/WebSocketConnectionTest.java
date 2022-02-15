@@ -73,8 +73,8 @@ public class WebSocketConnectionTest {
         blockingQueue = new LinkedBlockingDeque<>();
         stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         stompClient.setMessageConverter(messageConverter);
-        stompSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {
-        }).get(1, SECONDS);
+        stompSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {})
+                                  .get(1, SECONDS);
 
         stompSession.subscribe(SUBSCRIBE_ENDPOINT + to, new StompFrameHandler() {
             @Override
