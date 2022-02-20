@@ -8,6 +8,7 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.web.server.LocalServerPort;
 import org.springframework.data.domain.PageRequest;
@@ -51,7 +52,8 @@ public class WebSocketConnectionTest {
     private ChatMessageRepository chatMessageRepository;
 
     @Autowired
-    private RedisTemplate<String, OneToOneChatMessage> redisTemplate;
+    @Qualifier("redisRepositoryTemplate")
+    private RedisTemplate<String, OneToOneChatMessage> redisRepositoryTemplate;
 
     private static final String SEND_ENDPOINT = "/pub/chat/one-to-one";
     private static final String SUBSCRIBE_ENDPOINT = "/sub/chat/";
@@ -74,7 +76,10 @@ public class WebSocketConnectionTest {
         stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         stompClient.setMessageConverter(messageConverter);
         stompSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {})
-                                  .get(1, SECONDS);
+                                  .get(5, SECONDS);
+
+        stompSession.send("/pub/enter", from);
+        stompSession.send("/pub/enter", to);
 
         stompSession.subscribe(SUBSCRIBE_ENDPOINT + to, new StompFrameHandler() {
             @Override
@@ -88,7 +93,7 @@ public class WebSocketConnectionTest {
             }
         });
 
-        redisTemplate.delete(OneToOneChatMessage.ROOM_ID_PREFIX + from + "-" + to);
+        redisRepositoryTemplate.delete(OneToOneChatMessage.ROOM_ID_PREFIX + to + "-" + from);
     }
 
     @Test
@@ -96,7 +101,7 @@ public class WebSocketConnectionTest {
         String content = "test content";
         stompSession.send(SEND_ENDPOINT, new OneToOneChatMessageDTO(from, to, content));
 
-        OneToOneChatMessage message = blockingQueue.poll(1, SECONDS);
+        OneToOneChatMessage message = blockingQueue.poll(5, SECONDS);
 
         assertNotNull(message);
         assertEquals(content, message.getContent());

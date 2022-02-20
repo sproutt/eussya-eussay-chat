@@ -1,5 +1,6 @@
-package com.sproutt.eussyaeussyachat.application;
+package com.sproutt.eussyaeussyachat.application.chat;
 
+import com.sproutt.eussyaeussyachat.application.chat.ChatService;
 import com.sproutt.eussyaeussyachat.domain.ChatMessageRepository;
 import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
 import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;

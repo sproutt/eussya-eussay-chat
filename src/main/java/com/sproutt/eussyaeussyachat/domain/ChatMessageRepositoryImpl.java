@@ -4,7 +4,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
-import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,12 +13,12 @@ import java.util.Objects;
 @RequiredArgsConstructor
 public class ChatMessageRepositoryImpl implements ChatMessageRepository {
 
-    private final RedisTemplate<String, OneToOneChatMessage> redisTemplate;
+    private final RedisTemplate<String, OneToOneChatMessage> redisRepositoryTemplate;
 
     @Override
     public OneToOneChatMessage save(OneToOneChatMessage message) {
-        redisTemplate.opsForZSet()
-                     .add(message.getRoomId(), message, message.makeScore());
+        redisRepositoryTemplate.opsForZSet()
+                               .add(message.getRoomId(), message, message.makeScore());
 
         return message;
     }
@@ -28,8 +27,8 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
     public List<OneToOneChatMessage> findOneToOneMessagesByRoomIdWithPage(Long from, Long with, Pageable pageable) {
         long start = pageable.getOffset();
 
-        return new ArrayList<>(Objects.requireNonNull(redisTemplate.opsForZSet()
-                                                                   .range(parseKey(from, with), start, start + pageable.getPageSize() - 1)));
+        return new ArrayList<>(Objects.requireNonNull(redisRepositoryTemplate.opsForZSet()
+                                                                             .range(parseKey(from, with), start, start + pageable.getPageSize() - 1)));
     }
 
     private String parseKey(Long from, Long with) {
