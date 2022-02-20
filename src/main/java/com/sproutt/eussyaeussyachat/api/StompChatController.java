@@ -2,8 +2,8 @@ package com.sproutt.eussyaeussyachat.api;
 
 import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
 import com.sproutt.eussyaeussyachat.application.chat.ChatService;
-import com.sproutt.eussyaeussyachat.application.redisServer.RedisPublisher;
-import com.sproutt.eussyaeussyachat.application.redisServer.RedisSubscriber;
+import com.sproutt.eussyaeussyachat.application.pubsub.RedisPublisher;
+import com.sproutt.eussyaeussyachat.application.pubsub.RedisSubscriber;
 import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,8 +14,6 @@ import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.stereotype.Controller;
 
 import javax.annotation.PostConstruct;
-import java.util.HashMap;
-import java.util.Map;
 
 @Log4j2
 @Controller
@@ -27,30 +25,26 @@ public class StompChatController {
     private final RedisMessageListenerContainer redisMessageListenerContainer;
     private final RedisSubscriber redisSubscriber;
     private final RedisTemplate redisUserConnectionTemplate;
-
-    ChannelTopic server;
-    private Map<String, ChannelTopic> topics;
+    private final ChannelTopic channelTopic;
 
     @PostConstruct
     public void init() {
-        topics = new HashMap<>();
-        server = new ChannelTopic("server_A");
-        topics.put(server.getTopic(), server);
-        redisMessageListenerContainer.addMessageListener(redisSubscriber, server);
+        redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
     }
 
     @MessageMapping(value = "/enter")
     public void enter(long userId) {
-        redisUserConnectionTemplate.opsForValue().set(String.valueOf(userId), server.getTopic());
+        redisUserConnectionTemplate.opsForValue().set(String.valueOf(userId), channelTopic.getTopic());
     }
 
     @MessageMapping(value = "/chat/one-to-one")
     public void message(OneToOneChatMessageDTO messageDto) {
         OneToOneChatMessage message = chatService.save(messageDto);
 
-        String serverName = (String) redisUserConnectionTemplate.opsForValue().get(String.valueOf(messageDto.getTo()));
-        serverName = serverName.trim();
+        String topic = (String) redisUserConnectionTemplate.opsForValue().get(String.valueOf(messageDto.getTo()));
 
-        redisPublisher.publish(topics.get(serverName), message);
+        // TODO 사용자가 접속상태가 아닌 경우 로직 추가
+
+        redisPublisher.publish(ChannelTopic.of(topic), message);
     }
 }

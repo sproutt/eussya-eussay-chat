@@ -1,6 +1,7 @@
 package com.sproutt.eussyaeussyachat.config;
 
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
@@ -12,9 +13,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @Configuration
 public class RedisUserConnectionConfig {
 
+    @Value("${redis.userConnection.host}")
+    private String host;
+
+    @Value("${redis.userConnection.port}")
+    private int port;
+
     @Bean(name = "redisUserConnectionFactory")
     public LettuceConnectionFactory redisRepositoryFactory() {
-        return new LettuceConnectionFactory("127.0.0.1", 6378);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean(name = "redisUserConnectionTemplate")

@@ -1,4 +1,4 @@
-package com.sproutt.eussyaeussyachat.application.redisServer;
+package com.sproutt.eussyaeussyachat.application.pubsub;
 
 import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;

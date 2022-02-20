@@ -1,0 +1,10 @@
+redis:
+  repository:
+    host: ${REDIS_REPOSITORY_HOST}
+    port: ${REDIS_REPOSITORY_PORT}
+  server:
+    host: ${REDIS_SERVER_HOST}
+    port: ${REDIS_SERVER_PORT}
+  userConnection:
+    host: ${REDIS_USER_CONNECTION_HOST}
+    port: ${REDIS_USER_CONNECTION_PORT}

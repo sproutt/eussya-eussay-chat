@@ -3,9 +3,9 @@ package com.sproutt.eussyaeussyachat.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -17,9 +17,15 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 @EnableRedisRepositories
 public class RedisRepositoryConfig {
 
+    @Value("${redis.repository.host}")
+    private String host;
+
+    @Value("${redis.repository.port}")
+    private int port;
+
     @Bean(name = "redisRepositoryFactory")
     public LettuceConnectionFactory redisRepositoryFactory() {
-        return new LettuceConnectionFactory("127.0.0.1", 6379);
+        return new LettuceConnectionFactory(host, port);
     }
 
     @Bean(name = "redisRepositoryTemplate")
