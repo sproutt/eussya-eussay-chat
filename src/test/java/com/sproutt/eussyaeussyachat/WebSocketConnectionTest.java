@@ -85,9 +85,6 @@ public class WebSocketConnectionTest {
                                   })
                                   .get(5, SECONDS);
 
-        stompSession.send("/pub/enter", from);
-        stompSession.send("/pub/enter", to);
-
         stompSession.subscribe(SUBSCRIBE_ENDPOINT + to, new StompFrameHandler() {
             @Override
             public Type getPayloadType(StompHeaders headers) {

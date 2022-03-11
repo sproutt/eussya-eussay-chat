@@ -32,11 +32,6 @@ public class StompChatController {
         redisMessageListenerContainer.addMessageListener(redisSubscriber, channelTopic);
     }
 
-    @MessageMapping(value = "/enter")
-    public void enter(long userId) {
-        redisUserConnectionTemplate.opsForValue().set(String.valueOf(userId), channelTopic.getTopic());
-    }
-
     @MessageMapping(value = "/chat/one-to-one")
     public void message(OneToOneChatMessageDTO messageDto) {
         OneToOneChatMessage message = chatService.save(messageDto);
@@ -44,6 +39,9 @@ public class StompChatController {
         String topic = (String) redisUserConnectionTemplate.opsForValue().get(String.valueOf(messageDto.getTo()));
 
         // TODO 사용자가 접속상태가 아닌 경우 로직 추가
+        if (topic == null) {
+            return;
+        }
 
         redisPublisher.publish(ChannelTopic.of(topic), message);
     }
