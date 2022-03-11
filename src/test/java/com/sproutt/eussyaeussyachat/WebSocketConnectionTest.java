@@ -19,6 +19,7 @@ import org.springframework.messaging.simp.stomp.StompHeaders;
 import org.springframework.messaging.simp.stomp.StompSession;
 import org.springframework.messaging.simp.stomp.StompSessionHandlerAdapter;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
+import org.springframework.web.socket.WebSocketHttpHeaders;
 import org.springframework.web.socket.client.standard.StandardWebSocketClient;
 import org.springframework.web.socket.messaging.WebSocketStompClient;
 import org.springframework.web.socket.sockjs.client.SockJsClient;
@@ -57,6 +58,7 @@ public class WebSocketConnectionTest {
 
     private static final String SEND_ENDPOINT = "/pub/chat/one-to-one";
     private static final String SUBSCRIBE_ENDPOINT = "/sub/chat/";
+    private static final String TEST_TOKEN = "eyJ0eXAiOiJqd3QiLCJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJtZW1iZXIiLCJtZW1iZXIiOnsiaWQiOjEsIm1lbWJlcklkIjoibW9jazEyMyIsIm5pY2tOYW1lIjoibW9jayIsInJvbGUiOm51bGwsInByb2ZpbGVQYXRoIjoiIn0sImlhdCI6MTY0NzAwODE0MSwiZXhwIjoxOTYyMzY4MTQxfQ.Cw6IDuFJA4xGwlIF86StErdC0tgqm0Szb-45x4iCKNM";
 
     private String URL;
     private BlockingQueue<OneToOneChatMessage> blockingQueue;
@@ -75,7 +77,12 @@ public class WebSocketConnectionTest {
         blockingQueue = new LinkedBlockingDeque<>();
         stompClient = new WebSocketStompClient(new SockJsClient(createTransportClient()));
         stompClient.setMessageConverter(messageConverter);
-        stompSession = stompClient.connect(URL, new StompSessionHandlerAdapter() {})
+        WebSocketHttpHeaders handshakeHeaders = new WebSocketHttpHeaders();
+        StompHeaders connectHeaders = new StompHeaders();
+        connectHeaders.add("token", TEST_TOKEN);
+
+        stompSession = stompClient.connect(URL, handshakeHeaders, connectHeaders, new StompSessionHandlerAdapter() {
+                                  })
                                   .get(5, SECONDS);
 
         stompSession.send("/pub/enter", from);
@@ -136,4 +143,3 @@ public class WebSocketConnectionTest {
         return transports;
     }
 }
-
