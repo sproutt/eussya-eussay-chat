@@ -1,4 +1,4 @@
-package com.sproutt.eussyaeussyachat.domain;
+package com.sproutt.eussyaeussyachat.domain.chat;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;

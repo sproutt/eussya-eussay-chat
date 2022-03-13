@@ -1,4 +1,4 @@
-package com.sproutt.eussyaeussyachat.domain;
+package com.sproutt.eussyaeussyachat.domain.chat;
 
 import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
 import lombok.Data;

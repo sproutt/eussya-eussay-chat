@@ -2,7 +2,7 @@ package com.sproutt.eussyaeussyachat.config;
 
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sproutt.eussyaeussyachat.api.dto.MemberTokenCommand;
+import com.sproutt.eussyaeussyachat.domain.member.MemberTokenCommand;
 import io.jsonwebtoken.*;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -19,7 +19,7 @@ public class JwtHelper {
         return this.getClaims(jwt) != null;
     }
 
-    public long getUserIdFromToken(String token) {
+    public long getMemberIdFromToken(String token) {
         Jws<Claims> claims = getClaims(token);
         ObjectMapper objectMapper = new ObjectMapper();
 

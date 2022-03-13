@@ -1,8 +1,8 @@
 package com.sproutt.eussyaeussyachat.application.chat;
 
 import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
-import com.sproutt.eussyaeussyachat.domain.ChatMessageRepository;
-import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
+import com.sproutt.eussyaeussyachat.domain.chat.ChatMessageRepository;
+import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;

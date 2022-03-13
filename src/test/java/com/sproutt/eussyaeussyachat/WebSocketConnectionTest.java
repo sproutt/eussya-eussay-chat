@@ -1,8 +1,8 @@
 package com.sproutt.eussyaeussyachat;
 
 import com.sproutt.eussyaeussyachat.api.dto.OneToOneChatMessageDTO;
-import com.sproutt.eussyaeussyachat.domain.ChatMessageRepository;
-import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
+import com.sproutt.eussyaeussyachat.domain.chat.ChatMessageRepository;
+import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;

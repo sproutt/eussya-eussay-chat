@@ -1,7 +1,7 @@
 package com.sproutt.eussyaeussyachat.application.pubsub;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
+import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.connection.Message;
 import org.springframework.data.redis.connection.MessageListener;

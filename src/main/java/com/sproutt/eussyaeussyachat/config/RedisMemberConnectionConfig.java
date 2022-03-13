@@ -11,21 +11,21 @@ import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
-public class RedisUserConnectionConfig {
+public class RedisMemberConnectionConfig {
 
-    @Value("${redis.userConnection.host}")
+    @Value("${redis.memberConnection.host}")
     private String host;
 
-    @Value("${redis.userConnection.port}")
+    @Value("${redis.memberConnection.port}")
     private int port;
 
-    @Bean(name = "redisUserConnectionFactory")
+    @Bean(name = "redisMemberConnectionFactory")
     public LettuceConnectionFactory redisRepositoryFactory() {
         return new LettuceConnectionFactory(host, port);
     }
 
-    @Bean(name = "redisUserConnectionTemplate")
-    public RedisTemplate<String, Object> redisRepositoryTemplate(@Qualifier("redisUserConnectionFactory") RedisConnectionFactory connectionFactory) {
+    @Bean(name = "redisMemberConnectionTemplate")
+    public RedisTemplate<String, Object> redisRepositoryTemplate(@Qualifier("redisMemberConnectionFactory") RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Object> redisTemplate = new RedisTemplate<>();
         redisTemplate.setConnectionFactory(connectionFactory);
         redisTemplate.setKeySerializer(new StringRedisSerializer());

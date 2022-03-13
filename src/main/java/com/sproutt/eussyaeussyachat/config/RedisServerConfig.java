@@ -1,7 +1,7 @@
 package com.sproutt.eussyaeussyachat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
+import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
@@ -41,7 +41,7 @@ public class RedisServerConfig {
 
     @Bean
     public ChannelTopic channelTopic() {
-        return new ChannelTopic("Server_A");
+        return new ChannelTopic("Server_A"); // TODO 외부 변수로 빼기
     }
 
     @Bean(name = "redisServerTemplate")

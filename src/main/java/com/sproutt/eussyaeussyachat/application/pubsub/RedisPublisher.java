@@ -1,6 +1,6 @@
 package com.sproutt.eussyaeussyachat.application.pubsub;
 
-import com.sproutt.eussyaeussyachat.domain.OneToOneChatMessage;
+import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.listener.ChannelTopic;
