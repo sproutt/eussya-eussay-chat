@@ -36,13 +36,14 @@ public class StompChatController {
     public void message(OneToOneChatMessageDTO messageDto) {
         OneToOneChatMessage message = chatService.save(messageDto);
 
-        String topic = (String) redisUserConnectionTemplate.opsForValue().get(String.valueOf(messageDto.getTo()));
+        String serverTopic = (String) redisUserConnectionTemplate.opsForValue().get(String.valueOf(messageDto.getTo()));
 
-        // TODO 사용자가 접속상태가 아닌 경우 로직 추가
-        if (topic == null) {
+        if (serverTopic == null) {
+            // TODO messageDTO의 from user가 존재하는 사용자인지 여부 체크 로직
+            chatService.saveAsUnreadMessage(messageDto);
             return;
         }
 
-        redisPublisher.publish(ChannelTopic.of(topic), message);
+        redisPublisher.publish(ChannelTopic.of(serverTopic), message);
     }
 }

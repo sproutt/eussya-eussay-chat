@@ -31,6 +31,12 @@ public class ChatMessageRepositoryImpl implements ChatMessageRepository {
                                                                              .range(parseKey(from, with), start, start + pageable.getPageSize() - 1)));
     }
 
+    @Override
+    public void saveAsUnreadMessage(OneToOneChatMessage message) {
+        redisRepositoryTemplate.opsForZSet()
+                               .add("unread:" + message.getTo(), message, message.makeScore());
+    }
+
     private String parseKey(Long from, Long with) {
         long first = Math.min(from, with);
         long second = Math.max(from, with);

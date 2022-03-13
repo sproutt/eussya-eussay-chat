@@ -26,4 +26,9 @@ public class ChatServiceImpl implements ChatService {
     public List<OneToOneChatMessage> findOneToOneChatMessages(Long from, Long with, int page) {
         return chatMessageRepository.findOneToOneMessagesByRoomIdWithPage(from, with, PageRequest.of(page, PAGE_SIZE));
     }
+
+    @Override
+    public void saveAsUnreadMessage(OneToOneChatMessageDTO dto) {
+        chatMessageRepository.saveAsUnreadMessage(OneToOneChatMessage.of(dto));
+    }
 }

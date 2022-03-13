@@ -9,4 +9,6 @@ public interface ChatMessageRepository {
     OneToOneChatMessage save(OneToOneChatMessage message);
 
     List<OneToOneChatMessage> findOneToOneMessagesByRoomIdWithPage(Long from, Long with, Pageable pageable);
+
+    void saveAsUnreadMessage(OneToOneChatMessage message);
 }

@@ -10,4 +10,6 @@ public interface ChatService {
     OneToOneChatMessage save(OneToOneChatMessageDTO dto);
 
     List<OneToOneChatMessage> findOneToOneChatMessages(Long from, Long with, int page);
+
+    void saveAsUnreadMessage(OneToOneChatMessageDTO messageDto);
 }
