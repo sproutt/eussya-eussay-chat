@@ -1,6 +1,7 @@
 package com.sproutt.eussyaeussyachat.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.sproutt.eussyaeussyachat.application.pubsub.RedisSubscriber;
 import com.sproutt.eussyaeussyachat.domain.chat.OneToOneChatMessage;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -36,15 +37,17 @@ public class RedisPubSubConfig {
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(@Qualifier("redisPubSubConnectionFactory") RedisConnectionFactory connectionFactory, @Qualifier("redisPubSubTemplate") RedisTemplate redisTemplate) {
-        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
-        container.setConnectionFactory(connectionFactory);
-        return container;
+    public ChannelTopic channelTopic() {
+        return new ChannelTopic(channelName);
     }
 
     @Bean
-    public ChannelTopic channelTopic() {
-        return new ChannelTopic(channelName); // TODO 외부 변수로 빼기
+    public RedisMessageListenerContainer redisMessageListener(@Qualifier("redisPubSubConnectionFactory") RedisConnectionFactory connectionFactory, RedisSubscriber redisSubscriber, ChannelTopic channelTopic) {
+        RedisMessageListenerContainer container = new RedisMessageListenerContainer();
+        container.setConnectionFactory(connectionFactory);
+        container.addMessageListener(redisSubscriber, channelTopic);
+
+        return container;
     }
 
     @Bean(name = "redisPubSubTemplate")
