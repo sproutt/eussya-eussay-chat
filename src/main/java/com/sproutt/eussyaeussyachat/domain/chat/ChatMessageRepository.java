@@ -1,9 +1,11 @@
 package com.sproutt.eussyaeussyachat.domain.chat;
 
 import org.springframework.data.domain.Pageable;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
+@Transactional
 public interface ChatMessageRepository {
 
     OneToOneChatMessage save(OneToOneChatMessage message);

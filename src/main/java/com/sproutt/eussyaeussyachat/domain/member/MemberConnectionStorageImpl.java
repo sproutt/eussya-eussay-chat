@@ -2,14 +2,13 @@ package com.sproutt.eussyaeussyachat.domain.member;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
 public class MemberConnectionStorageImpl implements MemberConnectionStorage {
 
-    private final RedisTemplate redisMemberConnectionTemplate;
+    private final RedisTemplate<String, String> redisMemberConnectionTemplate;
 
     private static final String PREFIX_SESSION_ID = "sessionId:";
 
@@ -19,13 +18,9 @@ public class MemberConnectionStorageImpl implements MemberConnectionStorage {
     }
 
     @Override
-    public void saveSessionIdWithMemberId(String sessionId, long memberId) {
-        redisMemberConnectionTemplate.opsForValue().set(PREFIX_SESSION_ID + sessionId, String.valueOf(memberId));
-    }
-
-    @Override
-    public void saveMemberId(long memberId, ChannelTopic channelTopic) {
-        redisMemberConnectionTemplate.opsForValue().set(String.valueOf(memberId), channelTopic.getTopic());
+    public void saveConnectedMember(ConnectionInfo connectionInfo) {
+        redisMemberConnectionTemplate.opsForValue().set(PREFIX_SESSION_ID + connectionInfo.getSessionId(), connectionInfo.getMemberId());
+        redisMemberConnectionTemplate.opsForValue().set(connectionInfo.getMemberId(), connectionInfo.getChannelName());
     }
 
     @Override

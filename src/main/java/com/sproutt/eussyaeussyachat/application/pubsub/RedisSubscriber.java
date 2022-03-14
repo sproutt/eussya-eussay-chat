@@ -14,13 +14,13 @@ import org.springframework.stereotype.Service;
 public class RedisSubscriber implements MessageListener {
 
     private final ObjectMapper objectMapper;
-    private final RedisTemplate redisServerTemplate;
+    private final RedisTemplate<String, OneToOneChatMessage> redisPubSubTemplate;
     private final SimpMessagingTemplate messagingTemplate;
 
     @Override
     public void onMessage(Message message, byte[] pattern) {
         try {
-            String publishMessage = (String) redisServerTemplate.getStringSerializer().deserialize(message.getBody());
+            String publishMessage = redisPubSubTemplate.getStringSerializer().deserialize(message.getBody());
             OneToOneChatMessage roomMessage = objectMapper.readValue(publishMessage, OneToOneChatMessage.class);
 
             messagingTemplate.convertAndSend("/sub/chat/" + roomMessage.getTo(), roomMessage);

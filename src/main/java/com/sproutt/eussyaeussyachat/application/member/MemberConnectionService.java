@@ -1,12 +1,12 @@
 package com.sproutt.eussyaeussyachat.application.member;
 
-import org.springframework.data.redis.listener.ChannelTopic;
+import com.sproutt.eussyaeussyachat.domain.member.ConnectionInfo;
 
 public interface MemberConnectionService {
 
     String findConnectionServerTopic(long memberId);
 
-    void saveAsConnectedMember(String sessionId, long userId, ChannelTopic channelTopic);
+    void saveAsConnectedMember(ConnectionInfo connectionInfo);
 
     void removeDisconnectedMemberBySessionId(String sessionId);
 }

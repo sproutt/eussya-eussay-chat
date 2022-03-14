@@ -1,6 +1,7 @@
 package com.sproutt.eussyaeussyachat.config;
 
 import com.sproutt.eussyaeussyachat.application.member.MemberConnectionService;
+import com.sproutt.eussyaeussyachat.domain.member.ConnectionInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.redis.listener.ChannelTopic;
 import org.springframework.messaging.Message;
@@ -41,8 +42,8 @@ public class StompHandler implements ChannelInterceptor {
     }
 
     private void connect(StompHeaderAccessor accessor, String token) {
-        long memberId = jwtHelper.getMemberIdFromToken(token);
-        memberConnectionService.saveAsConnectedMember(accessor.getSessionId(), memberId, this.channelTopic);
+        String memberId = String.valueOf(jwtHelper.getMemberIdFromToken(token));
+        memberConnectionService.saveAsConnectedMember(new ConnectionInfo(accessor.getSessionId(), memberId, this.channelTopic.getTopic()));
     }
 
     private void disconnect(StompHeaderAccessor accessor) {

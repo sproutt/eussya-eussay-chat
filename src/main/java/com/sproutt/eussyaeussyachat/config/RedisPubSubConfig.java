@@ -18,22 +18,25 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 @Configuration
 @RequiredArgsConstructor
-public class RedisServerConfig {
+public class RedisPubSubConfig {
 
-    @Value("${redis.server.host}")
+    @Value("${redis.pubsub.host}")
     private String host;
 
-    @Value("${redis.server.port}")
+    @Value("${redis.pubsub.port}")
     private int port;
 
-    @Bean(name = "redisServerConnectionFactory")
+    @Value("${redis.pubsub.channelName}")
+    private String channelName;
+
+    @Bean(name = "redisPubSubConnectionFactory")
     @Primary
     public LettuceConnectionFactory redisServerConnectionFactory() {
         return new LettuceConnectionFactory(host, port);
     }
 
     @Bean
-    public RedisMessageListenerContainer redisMessageListener(@Qualifier("redisServerConnectionFactory") RedisConnectionFactory connectionFactory, @Qualifier("redisServerTemplate") RedisTemplate redisTemplate) {
+    public RedisMessageListenerContainer redisMessageListener(@Qualifier("redisPubSubConnectionFactory") RedisConnectionFactory connectionFactory, @Qualifier("redisPubSubTemplate") RedisTemplate redisTemplate) {
         RedisMessageListenerContainer container = new RedisMessageListenerContainer();
         container.setConnectionFactory(connectionFactory);
         return container;
@@ -41,11 +44,11 @@ public class RedisServerConfig {
 
     @Bean
     public ChannelTopic channelTopic() {
-        return new ChannelTopic("Server_A"); // TODO 외부 변수로 빼기
+        return new ChannelTopic(channelName); // TODO 외부 변수로 빼기
     }
 
-    @Bean(name = "redisServerTemplate")
-    public RedisTemplate<String, OneToOneChatMessage> redisServerTemplate(@Qualifier("redisServerConnectionFactory") RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
+    @Bean(name = "redisPubSubTemplate")
+    public RedisTemplate<String, OneToOneChatMessage> redisServerTemplate(@Qualifier("redisPubSubConnectionFactory") RedisConnectionFactory connectionFactory, ObjectMapper objectMapper) {
         var serializer = new Jackson2JsonRedisSerializer<>(OneToOneChatMessage.class);
         serializer.setObjectMapper(objectMapper);
 
