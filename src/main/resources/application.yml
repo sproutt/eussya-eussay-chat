@@ -1,0 +1,14 @@
+redis:
+  repository:
+    host: ${REDIS_REPOSITORY_HOST}
+    port: ${REDIS_REPOSITORY_PORT}
+  pubsub:
+    host: ${REDIS_PUBSUB_HOST}
+    port: ${REDIS_PUBSUB_PORT}
+    channelName: ${REDIS_PUBSUB_CHANNEL_NAME}
+  memberConnection:
+    host: ${REDIS_MEMBER_CONNECTION_HOST}
+    port: ${REDIS_MEMBER_CONNECTION_PORT}
+
+jwt:
+  secret: ${JWT_SECRET}
